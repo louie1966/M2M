@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JobPortal.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="JobPortalStoreContainer">
+    <EntitySet Name="JobPosts" EntityType="JobPortal.Store.JobPosts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employers" EntityType="JobPortal.Store.Employers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="JobTags" EntityType="JobPortal.Store.JobTags" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="JobPostJobTag" EntityType="JobPortal.Store.JobPostJobTag" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_JobPostJobTag_JobPost" Association="JobPortal.Store.FK_JobPostJobTag_JobPost">
+      <End Role="JobPost" EntitySet="JobPosts" />
+      <End Role="JobPostJobTag" EntitySet="JobPostJobTag" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobPostJobTag_JobTag" Association="JobPortal.Store.FK_JobPostJobTag_JobTag">
+      <End Role="JobTag" EntitySet="JobTags" />
+      <End Role="JobPostJobTag" EntitySet="JobPostJobTag" />
+    </AssociationSet>
+    <AssociationSet Name="JobPostEmployer" Association="JobPortal.Store.JobPostEmployer">
+      <End Role="JobPost" EntitySet="JobPosts" />
+      <End Role="Employer" EntitySet="Employers" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="JobPosts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EmployerId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FullName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JobTags">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tag" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JobPostJobTag">
+    <Key>
+      <PropertyRef Name="JobPosts_Id" />
+      <PropertyRef Name="JobTags_Id" />
+    </Key>
+    <Property Name="JobPosts_Id" Type="int" Nullable="false" />
+    <Property Name="JobTags_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="JobPostEmployer">
+    <End Role="JobPost" Type="JobPortal.Store.JobPosts" Multiplicity="*" />
+    <End Role="Employer" Type="JobPortal.Store.Employers" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Employer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobPost">
+        <PropertyRef Name="EmployerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobPostJobTag_JobPost">
+    <End Role="JobPost" Type="JobPortal.Store.JobPosts" Multiplicity="1" />
+    <End Role="JobPostJobTag" Type="JobPortal.Store.JobPostJobTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JobPost">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobPostJobTag">
+        <PropertyRef Name="JobPosts_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobPostJobTag_JobTag">
+    <End Role="JobPostJobTag" Type="JobPortal.Store.JobPostJobTag" Multiplicity="*" />
+    <End Role="JobTag" Type="JobPortal.Store.JobTags" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="JobTag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobPostJobTag">
+        <PropertyRef Name="JobTags_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="JobPortal" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="JobPortalContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="JobPosts" EntityType="JobPortal.JobPost" />
+          <EntitySet Name="Employers" EntityType="JobPortal.Employer" />
+          <EntitySet Name="JobTags" EntityType="JobPortal.JobTag" />
+          <AssociationSet Name="JobPostJobTag" Association="JobPortal.JobPostJobTag">
+            <End Role="JobPost" EntitySet="JobPosts" />
+            <End Role="JobTag" EntitySet="JobTags" />
+          </AssociationSet>
+          <AssociationSet Name="JobPostEmployer" Association="JobPortal.JobPostEmployer">
+            <End Role="JobPost" EntitySet="JobPosts" />
+            <End Role="Employer" EntitySet="Employers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="JobPost">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <NavigationProperty Name="JobTags" Relationship="JobPortal.JobPostJobTag" FromRole="JobPost" ToRole="JobTag" />
+          <NavigationProperty Name="Employer" Relationship="JobPortal.JobPostEmployer" FromRole="JobPost" ToRole="Employer" />
+          <Property Name="EmployerId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" Nullable="false" />
+          <NavigationProperty Name="JobPosts" Relationship="JobPortal.JobPostEmployer" FromRole="Employer" ToRole="JobPost" />
+        </EntityType>
+        <EntityType Name="JobTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tag" Type="String" Nullable="false" />
+          <NavigationProperty Name="JobPosts" Relationship="JobPortal.JobPostJobTag" FromRole="JobTag" ToRole="JobPost" />
+        </EntityType>
+        <Association Name="JobPostJobTag">
+          <End Type="JobPortal.JobPost" Role="JobPost" Multiplicity="*" />
+          <End Type="JobPortal.JobTag" Role="JobTag" Multiplicity="*" />
+        </Association>
+        <Association Name="JobPostEmployer">
+          <End Type="JobPortal.JobPost" Role="JobPost" Multiplicity="*" />
+          <End Type="JobPortal.Employer" Role="Employer" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Employer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobPost">
+              <PropertyRef Name="EmployerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="JobPortalStoreContainer" CdmEntityContainer="JobPortalContainer">
+    <EntitySetMapping Name="JobPosts">
+      <EntityTypeMapping TypeName="IsTypeOf(JobPortal.JobPost)">
+        <MappingFragment StoreEntitySet="JobPosts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employers">
+      <EntityTypeMapping TypeName="IsTypeOf(JobPortal.Employer)">
+        <MappingFragment StoreEntitySet="Employers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobTags">
+      <EntityTypeMapping TypeName="IsTypeOf(JobPortal.JobTag)">
+        <MappingFragment StoreEntitySet="JobTags">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Tag" ColumnName="Tag" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="JobPostJobTag" TypeName="JobPortal.JobPostJobTag" StoreEntitySet="JobPostJobTag">
+      <EndProperty Name="JobPost">
+        <ScalarProperty Name="Id" ColumnName="JobPosts_Id" />
+      </EndProperty>
+      <EndProperty Name="JobTag">
+        <ScalarProperty Name="Id" ColumnName="JobTags_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3458f3faebd846d0b9c29a344de3e081" Name="Diagram1" >
+        <EntityTypeShape EntityType="JobPortal.JobPost" Width="1.5" PointX="7.875" PointY="0.875" />
+        <EntityTypeShape EntityType="JobPortal.Employer" Width="1.5" PointX="4.375" PointY="0.875" />
+        <EntityTypeShape EntityType="JobPortal.JobTag" Width="1.5" PointX="11.25" PointY="1.125" />
+        <AssociationConnector Association="JobPortal.JobPostJobTag" />
+        <AssociationConnector Association="JobPortal.JobPostEmployer" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
